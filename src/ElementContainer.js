@@ -81,10 +81,14 @@ export class ElementContainer extends PureComponent {
 
         return (
             <Animated.View
+                onLayout={(event) => {
+                    var {x, y, width, height} = event.nativeEvent.layout;
+                    console.log(x + ' ' + y + ' ' + width + ' ' + height)
+                }}
                 style={[styles.container, style, {
                     opacity: this._opacity
                 }]}
-                ref={node => (this._parent = node)}
+                ref={ref => this._parent = ref}
                 {...this._gestureHandler.panHandlers}
             >
                 { children }
@@ -142,7 +146,7 @@ export class ElementContainer extends PureComponent {
 
         gesturePosition.setOffset({
             x: 0,
-            y: selectedMeasurement.y,
+            y: (selectedMeasurement && selectedMeasurement.y) || 0,
         });
 
         Animated.timing(this._opacity, {
